@@ -22,20 +22,20 @@ public class Consumer extends Thread {
     }
 
     @Override
-    public synchronized void run() {
+    public void run() {
+        while (true) {
+            synchronized (queue) {
+                if (queue.size() > 0) {
+                    int elem = queue.poll();
+                    System.out.println("Consumer consumes " + elem);
+                    try {
+                        queue.wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
 
-        synchronized (queue) {
-            if (queue.size() > 0) {
-                int elem = queue.poll();
-                System.out.println("Consumer consumes " + elem);
+                    }
+                }
             }
-            try {
-                queue.wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
-
-            }
-
         }
     }
 }
